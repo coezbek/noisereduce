@@ -45,42 +45,19 @@ def main():
         print(f"Warning: Input file {args.input_file} is not mono. Only the first channel will be used.")
         y = y[:, 0]  # Use only the first channel
 
-    # Ensure y is float
-    # if y.dtype != np.float32 and y.dtype != np.float64:
-    #     print(f"Warning: Input data type {y.dtype} is not float32 or float64. Converting to float32.")
-    #     if np.issubdtype(y.dtype, np.integer):
-    #         # Scale integer types to [-1.0, 1.0]
-    #         max_val = np.iinfo(y.dtype).max
-    #         y = y.astype(np.float32) / max_val
-    #     else:
-    #         # For other types, just convert
-    #         y = y.astype(np.float32)
-# 
-
     y_noise = None
     if args.noise_file:
         try:
             sr_noise, y_noise_data = wavfile.read(args.noise_file)
             if sr_noise != sr:
                 print(f"Warning: Sample rate of noise file ({sr_noise} Hz) does not match input signal ({sr} Hz). Resampling not implemented.")
-                # Potentially add resampling here if desired, or raise error
-            
-            if y_noise_data.dtype != np.float32 and y_noise_data.dtype != np.float64:
-                if np.issubdtype(y_noise_data.dtype, np.integer):
-                    max_val_noise = np.iinfo(y_noise_data.dtype).max
-                    y_noise = y_noise_data.astype(np.float32) / max_val_noise
-                else:
-                    y_noise = y_noise_data.astype(np.float32)
 
         except Exception as e:
             print(f"Error reading noise file {args.noise_file}: {e}")
-            # Decide if to proceed without y_noise or exit
-            # For now, proceed without y_noise if file read fails
             y_noise = None
 
-
     # Call reduce_noise function
-    reduced_y = reduce_noise(
+    output_y = reduce_noise(
         y=y,
         sr=sr,
         stationary=args.stationary,
@@ -104,30 +81,8 @@ def main():
         use_torch=args.use_torch,
         device=args.device,
     )
-
-    # Write output WAV file
-    # Ensure data is in a writable format for wavfile (e.g., int16 or float32)
-    # If original was int, scale back. For simplicity, always write float32 for now
-    # or scale to int16 if that's preferred for output.
-    # For now, assume reduced_y is float and wavfile can handle it.
-    # If it was scaled from int, it's now in [-1, 1] range.
-    # To save as int16, multiply by 32767 and convert type.
     
     try:
-        # If the output should be int16, scale and convert
-        # For now, let's try to save as float32 if possible, or scale to int16
-        if reduced_y.dtype == np.float32 or reduced_y.dtype == np.float64:
-             # If values are in [-1, 1], scale to int16 for broader compatibility
-            if np.max(np.abs(reduced_y)) <= 1.0:
-                output_y = (reduced_y * 32767).astype(np.int16)
-            else: # if it's already scaled e.g. from librosa load
-                output_y = reduced_y.astype(np.int16) # Or handle as error/warning
-        elif np.issubdtype(reduced_y.dtype, np.integer):
-            output_y = reduced_y # Already integer
-        else:
-            print(f"Warning: Output data type {reduced_y.dtype} may not be directly writable. Attempting conversion to int16.")
-            output_y = (reduced_y * 32767).astype(np.int16)
-
         wavfile.write(args.output_file, sr, output_y)
         print(f"Processed audio saved to {args.output_file}")
     except Exception as e:
