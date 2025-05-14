@@ -57,7 +57,7 @@ def reduce_noise(
     time_mask_smooth_ms : int, optional
         The time range to smooth the mask over in milliseconds, by default 50
     thresh_n_mult_nonstationary : int, optional
-        Only used in nonstationary noise reduction., by default 1
+        Only used in nonstationary noise reduction., by default 2
     sigmoid_slope_nonstationary : int, optional
         Only used in nonstationary noise reduction., by default 10
     n_std_thresh_stationary : int, optional

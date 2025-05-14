@@ -15,8 +15,8 @@ def main():
     parser.add_argument("--time-constant-s", type=float, default=2.0, help="Time constant in seconds for non-stationary algorithm.", dest="time_constant_s")
     parser.add_argument("--freq-mask-smooth-hz", type=int, default=500, help="Frequency range (Hz) to smooth the mask over.", dest="freq_mask_smooth_hz")
     parser.add_argument("--time-mask-smooth-ms", type=int, default=50, help="Time range (ms) to smooth the mask over.", dest="time_mask_smooth_ms")
-    parser.add_argument("--thresh-n-mult-nonstationary", type=float, default=3.0, help="Multiplier for threshold in non-stationary mode.", dest="thresh_n_mult_nonstationary") # Docstring says int, default 1. Code default is 2. README says int.
-    parser.add_argument("--sigmoid-slope-nonstationary", type=float, default=10.0, help="Slope for sigmoid in non-stationary mode.", dest="sigmoid_slope_nonstationary") # Docstring says int. README says int.
+    parser.add_argument("--thresh-n-mult-nonstationary", type=int, default=2, help="Multiplier for threshold in non-stationary mode.", dest="thresh_n_mult_nonstationary")
+    parser.add_argument("--sigmoid-slope-nonstationary", type=int, default=10, help="Slope for sigmoid in non-stationary mode.", dest="sigmoid_slope_nonstationary")
     parser.add_argument("--n-std-thresh-stationary", type=float, default=1.5, help="Number of standard deviations above mean for stationary threshold.", dest="n_std_thresh_stationary")
     parser.add_argument("--tmp-folder", help="Temporary folder for parallel processing.", default=None, dest="tmp_folder")
     parser.add_argument("--chunk-size", type=int, default=600000, help="Size of signal chunks for processing.", dest="chunk_size")
