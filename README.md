@@ -61,6 +61,13 @@ The most recent version of noisereduce comprises two algorithms:
 # Installation
 `pip install noisereduce`
 
+For developing noisereduce use:
+
+```bash
+git clone https://github.com/timsainb/noisereduce
+uv sync --all-extras
+```
+
 # Usage
 See example notebook: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/timsainb/noisereduce/blob/master/notebooks/1.0-test-noise-reduction.ipynb)
 Parallel computing example: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/timsainb/noisereduce/blob/master/notebooks/2.0-test-noisereduce-pytorch.ipynb)
